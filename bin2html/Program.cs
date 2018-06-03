@@ -31,7 +31,9 @@ namespace bin2html
                 var bytesAsStrings =
                         Enumerable.Range(0, nBytes)
                             .Select(i => BitConverter.ToString(StringToByteArrayReversed(text.Substring(8 * i, 8))).Replace("-",""));
-                string payload = "var payload=[0x" + String.Join(",0x", bytesAsStrings.ToArray()) + ",0];";
+                int remainder =  text.Length % 8;
+                string remainingBytes = remainder != 0 ? ",0x" + BitConverter.ToString(StringToByteArrayReversed(text.Substring(text.Length - remainder))).Replace("-", "") : "";
+                string payload = "var payload=[0x" + String.Join(",0x", bytesAsStrings.ToArray()) + remainingBytes + ",0];";
                 string html = 
                     choice == "4.55" 
                     ?
